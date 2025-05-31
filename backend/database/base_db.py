@@ -22,7 +22,7 @@ class DatabaseManager:
                     user=DB_USER,
                     password=DB_PASSWORD,
                     database=DB_NAME,
-                    cursor_factory=psycopg2.extras.DictCursor,  # 返回字典格式
+                    cursor_factory=psycopg2.extras.RealDictCursor,  # 返回字典格式
                 )
             except Exception as e:
                 print(f"数据库连接错误：{e}")
@@ -50,8 +50,11 @@ class DatabaseManager:
             try:
                 with self.connection.cursor() as cursor:
                     cursor.execute(query, params)
+                    result = None
+                    if "returning" in query.lower():
+                        result = cursor.fetchone()
                     self.connection.commit()
-                    return True
+                    return result if result else True
             except Exception as e:
                 print(f"数据库执行错误：{e}")
                 self.connection.rollback()

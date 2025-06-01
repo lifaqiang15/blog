@@ -14,21 +14,21 @@ class LoginRequest(BaseModel):
 
 
 @router.post("/login")
-def login(credentials: LoginRequest):
+def login(req: LoginRequest):
     with DatabaseManager() as db:
         query = "SELECT * FROM users WHERE username = %s"
-        user = db.fetch_query(query, (credentials.username,), single=True)
+        user = db.fetch_query(query, (req.username,), single=True)
         if not user:
             return {"code": 404, "message": "用户不存在"}
-        if bcrypt.verify(credentials.password, user["password_hash"]):
+        if bcrypt.verify(req.password, user["password_hash"]):
             token = create_access_token({"sub": user["username"], "user_id": user["id"]})
             return {"code": 200, "message": "登陆成功", "data": user, "token": token}
         else:
             return {"code": 401, "message": "密码错误"}
 
 
-# 添加用户
-class UserCreateRequest(BaseModel):
+# 创建用户
+class CreateUserRequest(BaseModel):
     username: str
     password: str
     role: str
@@ -36,15 +36,16 @@ class UserCreateRequest(BaseModel):
 
 
 @router.post("/user")
-def create_user(user_in: UserCreateRequest):
+def create_user(req: CreateUserRequest):
     with DatabaseManager() as db:
         query = "SELECT * FROM users WHERE username = %s"
-        user = db.fetch_query(query, (user_in.username,), single=True)
+        user = db.fetch_query(query, (req.username,), single=True)
         if user:
             return {"code": 400, "message": "用户已存在"}
         else:
             query = "INSERT INTO users (username, password_hash, role, avatar) VALUES (%s, crypt(%s, gen_salt('bf'::text, 10)), %s, %s) RETURNING id"
-            result = db.execute_query(query, (user_in.username, user_in.password, user_in.role, user_in.avatar))
+            params = (req.username, req.password, req.role, req.avatar)
+            result = db.execute_query(query, params)
             if result:
                 return {"code": 200, "message": "用户创建成功", "data": result}
             else:
@@ -64,7 +65,7 @@ def get_users():
 
 
 # 更新用户信息
-class UserUpdateRequest(BaseModel):
+class UpdateUserRequest(BaseModel):
     id: int
     username: str
     password: str
@@ -73,10 +74,10 @@ class UserUpdateRequest(BaseModel):
 
 
 @router.put("/user")
-def update_user(user: UserUpdateRequest):
+def update_user(req: UpdateUserRequest):
     with DatabaseManager() as db:
         query = "UPDATE users SET username=%s, password_hash=crypt(%s, gen_salt('bf'::text, 10)), role=%s, avatar=%s WHERE id=%s"
-        params = (user.username, user.password, user.role, user.avatar, user.id)
+        params = (req.username, req.password, req.role, req.avatar, req.id)
         result = db.execute_query(query, params)
         if result:
             return {"code": 200, "message": "用户信息更新成功"}

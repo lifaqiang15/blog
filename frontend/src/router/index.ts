@@ -7,11 +7,19 @@ const routes = [
     component: () => import('@/views/HomeView.vue'),
   },
   {
-    path: '/article/:id',
-    name: 'article',
+    path: '/blog',
+    name: 'blog',
     component: () => import('@/views/BlogView.vue'),
-    meta: { title: '文章详情' },
-    props: true,
+  },
+  {
+    path: '/user/home',
+    name: 'user-home',
+    component: () => import('@/views/UserHomePage.vue'),
+  },
+  {
+    path: '/user/profile',
+    name: 'user-profile',
+    component: () => import('@/views/UserProfile.vue'),
   },
   {
     path: '/:pathMatch(.*)*',

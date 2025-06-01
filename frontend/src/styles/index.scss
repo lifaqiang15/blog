@@ -2,7 +2,7 @@
   $colors: (
     'primary': (
       // 主色
-      'base': #27ba9b,
+      'base': #4aced1,
     ),
     'success': (
       // 成功色
@@ -26,3 +26,18 @@
 @import 'sanitize.css';
 @import 'sanitize.css/forms.css';
 @import 'sanitize.css/typography.css';
+
+$primary-color: #4aced1;
+$color: #3c3c43;
+
+html {
+  color: $color;
+  font-family:
+    'Punctuation SC', 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+a {
+  color: $color;
+  text-decoration: none;
+}

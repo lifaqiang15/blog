@@ -1,9 +1,14 @@
 <template>
-  <div class="blog-view">{{ id }}</div>
+  <div class="common-layout">
+    <el-container direction="vertical">
+      <HeaderTop />
+      <el-main>Main</el-main>
+    </el-container>
+  </div>
 </template>
 
 <script setup lang="ts">
-const props = defineProps(['id'])
+import HeaderTop from '@/components/HeaderTop.vue'
 </script>
 
 <style scoped lang="scss"></style>

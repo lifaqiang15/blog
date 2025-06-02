@@ -30,7 +30,10 @@
 $primary-color: #4aced1;
 $color: #3c3c43;
 
-html {
+html,
+body,
+#app {
+  height: 100%;
   color: $color;
   font-family:
     'Punctuation SC', 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',

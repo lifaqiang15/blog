@@ -22,7 +22,9 @@ def login(req: LoginRequest):
             return {"code": 404, "message": "用户不存在"}
         if bcrypt.verify(req.password, user["password_hash"]):
             token = create_access_token({"sub": user["username"], "user_id": user["id"]})
-            return {"code": 200, "message": "登陆成功", "data": user, "token": token}
+            user = {k: v for k, v in user.items() if k != "password_hash"}
+            user["token"] = token
+            return {"code": 200, "message": "登陆成功", "data": user}
         else:
             return {"code": 401, "message": "密码错误"}
 
@@ -59,6 +61,7 @@ def get_users():
         query = "SELECT * FROM users"
         users = db.fetch_query(query)
         if users:
+            users = [{k: v for k, v in user.items() if k != "password_hash"} for user in users]
             return {"code": 200, "message": "用户列表获取成功", "data": users}
         else:
             return {"code": 500, "message": "用户列表获取失败"}

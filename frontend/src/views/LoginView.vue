@@ -53,28 +53,14 @@ const form = reactive({
 const submit = async () => {
   loading.value = true
   try {
-    await userStore.login({ username: form.username, password: form.password })
-    if (form.remember) {
-      localStorage.setItem('username', form.username)
-      localStorage.setItem('password', form.password)
-    } else {
-      localStorage.removeItem('username')
-      localStorage.removeItem('password')
-    }
+    await userStore.login(form.username, form.password, form.remember)
     router.push('/')
   } catch (error) {
+    console.log(error)
+  } finally {
     loading.value = false
   }
 }
-
-onMounted(() => {
-  const username = localStorage.getItem('username')
-  const password = localStorage.getItem('password')
-  if (username && password) {
-    form.username = username
-    form.password = password
-  }
-})
 </script>
 
 <style scoped lang="scss">

@@ -31,7 +31,7 @@
               <router-link to="/user/profile" class="link">
                 <el-dropdown-item>个人中心</el-dropdown-item>
               </router-link>
-              <el-dropdown-item>退出登录</el-dropdown-item>
+              <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -43,6 +43,16 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import 'element-plus/theme-chalk/display.css'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
+
+const router = useRouter()
+const userStore = useUserStore()
+
+const logout = () => {
+  userStore.logout()
+  router.push('/login');
+}
 </script>
 
 <style scoped lang="scss">

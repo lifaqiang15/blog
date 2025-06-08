@@ -15,7 +15,13 @@ request.interceptors.request.use((config) => {
 // 响应拦截器
 request.interceptors.response.use(
   (res) => {
-    return res.data
+    const data = res.data
+    if (data.code === 200) {
+      return data
+    } else {
+      ElMessage.error(data.message)
+      return Promise.reject(new Error(data.message))
+    }
   },
   (error) => {
     if (!error.response) {

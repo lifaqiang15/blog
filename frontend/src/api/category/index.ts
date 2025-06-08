@@ -1,8 +1,8 @@
 import request from '@/utils/request'
-import type { CategoryRequest } from './type'
+import type { CategoryRequest, CategoryResponse } from './type'
 import type { Response, category } from '@/type'
 
-export const create_category = (data: CategoryRequest): Promise<Response<{ id: number }>> => {
+export const create_category = (data: CategoryRequest): Promise<Response<CategoryResponse>> => {
   return request.post('/category', data)
 }
 

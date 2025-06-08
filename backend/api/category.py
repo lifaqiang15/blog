@@ -8,7 +8,7 @@ router = APIRouter(tags=["category"])
 # 创建类别
 class CategoryRequest(BaseModel):
     name: str
-    cover_image: str
+    cover_image: str | None
     description: str
 
 
@@ -20,7 +20,9 @@ def create_category(req: CategoryRequest):
         if category:
             return {"code": 400, "message": "类别已存在"}
         else:
-            query = "INSERT INTO categories (name, cover_image, description) VALUES (%s, %s, %s) RETURNING id"
+            query = (
+                "INSERT INTO categories (name, cover_image, description) VALUES (%s, %s, %s) RETURNING id, created_time"
+            )
             params = (req.name, req.cover_image, req.description)
             result = db.execute_query(query, params)
             if result:

@@ -14,7 +14,7 @@ class LoginRequest(BaseModel):
 
 
 @router.post("/login")
-def login(req: LoginRequest):
+def user_login(req: LoginRequest):
     with DatabaseManager() as db:
         query = "SELECT * FROM users WHERE username = %s"
         user = db.fetch_query(query, (req.username,), single=True)
@@ -30,7 +30,7 @@ def login(req: LoginRequest):
 
 
 # 创建用户
-class CreateUserRequest(BaseModel):
+class UserRequest(BaseModel):
     username: str
     password: str
     role: str
@@ -38,7 +38,7 @@ class CreateUserRequest(BaseModel):
 
 
 @router.post("/user")
-def create_user(req: CreateUserRequest):
+def create_user(req: UserRequest):
     with DatabaseManager() as db:
         query = "SELECT * FROM users WHERE username = %s"
         user = db.fetch_query(query, (req.username,), single=True)
@@ -68,19 +68,11 @@ def get_users():
 
 
 # 更新用户信息
-class UpdateUserRequest(BaseModel):
-    id: int
-    username: str
-    password: str
-    role: str
-    avatar: str
-
-
-@router.put("/user")
-def update_user(req: UpdateUserRequest):
+@router.put("/user/{id}")
+def update_user(id: int, req: UserRequest):
     with DatabaseManager() as db:
         query = "UPDATE users SET username=%s, password_hash=crypt(%s, gen_salt('bf'::text, 10)), role=%s, avatar=%s WHERE id=%s"
-        params = (req.username, req.password, req.role, req.avatar, req.id)
+        params = (req.username, req.password, req.role, req.avatar, id)
         result = db.execute_query(query, params)
         if result:
             return {"code": 200, "message": "用户信息更新成功"}
@@ -89,7 +81,7 @@ def update_user(req: UpdateUserRequest):
 
 
 # 删除用户
-@router.delete("/user")
+@router.delete("/user/{id}")
 def delete_user(id: int):
     with DatabaseManager() as db:
         query = "DELETE FROM users WHERE id = %s"

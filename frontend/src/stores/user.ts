@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { userLogin } from '@/api/user'
+import { user_login } from '@/api/user'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -9,7 +9,7 @@ export const useUserStore = defineStore('user', {
   actions: {
     async login(username: string, password: string, remember: boolean) {
       try {
-        const result = await userLogin({ username, password })
+        const result = await user_login({ username, password })
         if (result.code === 200) {
           this.token = result.data!.token!
           this.username = result.data!.username

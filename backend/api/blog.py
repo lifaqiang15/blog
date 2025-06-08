@@ -10,15 +10,18 @@ router = APIRouter(tags=["blog"])
 class CreateBlogRequest(BaseModel):
     title: str
     content: str
-    user_id: str
-    category_id: str
+    status: str
+    user_id: int
+    category_id: int
 
 
 @router.post("/blog")
 def create_blog(blog_in: CreateBlogRequest):
     with DatabaseManager() as db:
-        query = "INSERT INTO blogs (title, content, user_id, category_id) VALUES (%s, %s, %s, %s) RETURNING id"
-        params = (blog_in.title, blog_in.content, blog_in.user_id, blog_in.category_id)
+        query = (
+            "INSERT INTO blogs (title, content, status, user_id, category_id) VALUES (%s, %s, %s, %s, %s) RETURNING id"
+        )
+        params = (blog_in.title, blog_in.content, blog_in.status, blog_in.user_id, blog_in.category_id)
         result = db.execute_query(query, params)
         if result:
             return {"code": 200, "message": "博客创建成功", "data": result}
@@ -27,7 +30,7 @@ def create_blog(blog_in: CreateBlogRequest):
 
 
 # 获取博客信息
-@router.get("/blog")
+@router.get("/blog/{id}")
 def get_blog(id: int):
     with DatabaseManager() as db:
         query = "SELECT * FROM blogs WHERE id = %s"
@@ -40,16 +43,15 @@ def get_blog(id: int):
 
 # 更新博客信息
 class UpdateBlogRequest(BaseModel):
-    id: int
     title: str
     content: str
     status: str
     published_time: str  # "2023-10-10T12:34:56+08:00"
-    category_id: str
+    category_id: int
 
 
-@router.put("/blog/info")
-def update_blog(blog: UpdateBlogRequest):
+@router.put("/blog/info/{id}")
+def update_blog(id: int, blog: UpdateBlogRequest):
     try:
         published_time = datetime.fromisoformat(blog.published_time).astimezone(timezone.utc)
     except Exception as e:
@@ -58,7 +60,7 @@ def update_blog(blog: UpdateBlogRequest):
     update_time = datetime.now(tz=timezone.utc)
     with DatabaseManager() as db:
         query = "UPDATE blogs SET title=%s, content=%s, status=%s, published_time=%s, update_time=%s, category_id=%s WHERE id=%s"
-        params = (blog.title, blog.content, blog.status, published_time, update_time, blog.category_id, blog.id)
+        params = (blog.title, blog.content, blog.status, published_time, update_time, blog.category_id, id)
         result = db.execute_query(query, params)
         if result:
             return {"code": 200, "message": "博客信息更新成功"}
@@ -67,16 +69,11 @@ def update_blog(blog: UpdateBlogRequest):
 
 
 # 更新博客浏览次数
-class UpdateBlogViewsCountRequest(BaseModel):
-    id: int
-    views_count: int
-
-
-@router.put("/blog/views")
-def update_blog_views_count(req: UpdateBlogViewsCountRequest):
+@router.put("/blog/views/{id}")
+def update_blog_views_count(id: int, views_count: int):
     with DatabaseManager() as db:
         query = "UPDATE blogs SET views_count=%s WHERE id=%s"
-        params = (req.views_count, req.id)
+        params = (views_count, id)
         result = db.execute_query(query, params)
         if result:
             return {"code": 200, "message": "博客浏览次数更新成功"}
@@ -85,7 +82,7 @@ def update_blog_views_count(req: UpdateBlogViewsCountRequest):
 
 
 # 删除博客
-@router.delete("/blog")
+@router.delete("/blog/{id}")
 def delete_blog(id: int):
     with DatabaseManager() as db:
         query = "DELETE FROM blogs WHERE id = %s"

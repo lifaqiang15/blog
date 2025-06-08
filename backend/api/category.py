@@ -6,21 +6,22 @@ router = APIRouter(tags=["category"])
 
 
 # 创建类别
-class CreateCategoryRequest(BaseModel):
+class CategoryRequest(BaseModel):
     name: str
     cover_image: str
+    description: str
 
 
 @router.post("/category")
-def create_category(req: CreateCategoryRequest):
+def create_category(req: CategoryRequest):
     with DatabaseManager() as db:
         query = 'SELECT * FROM categories WHERE "name" = %s'
         category = db.fetch_query(query, (req.name,), single=True)
         if category:
             return {"code": 400, "message": "类别已存在"}
         else:
-            query = "INSERT INTO categories (name, cover_image) VALUES (%s, %s) RETURNING id"
-            params = (req.name, req.cover_image)
+            query = "INSERT INTO categories (name, cover_image, description) VALUES (%s, %s, %s) RETURNING id"
+            params = (req.name, req.cover_image, req.description)
             result = db.execute_query(query, params)
             if result:
                 return {"code": 200, "message": "类别添加成功", "data": result}
@@ -41,17 +42,11 @@ def get_categories():
 
 
 # 更新类别信息
-class UpdateCategoryRequest(BaseModel):
-    id: int
-    name: str
-    cover_image: str
-
-
-@router.put("/category")
-def update_Category(req: UpdateCategoryRequest):
+@router.put("/category/{id}")
+def update_category(id: int, req: CategoryRequest):
     with DatabaseManager() as db:
-        query = "UPDATE categories SET name=%s, cover_image=%s WHERE id=%s"
-        params = (req.name, req.cover_image, req.id)
+        query = "UPDATE categories SET name=%s, cover_image=%s, description=%s WHERE id=%s"
+        params = (req.name, req.cover_image, req.description, id)
         result = db.execute_query(query, params)
         if result:
             return {"code": 200, "message": "类别信息更新成功"}
@@ -60,7 +55,7 @@ def update_Category(req: UpdateCategoryRequest):
 
 
 # 删除类别
-@router.delete("/category")
+@router.delete("/category/{id}")
 def delete_category(id: int):
     with DatabaseManager() as db:
         query = "DELETE FROM categories WHERE id = %s"

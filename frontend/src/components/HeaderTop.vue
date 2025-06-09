@@ -44,7 +44,7 @@
 import { Icon } from '@iconify/vue'
 import 'element-plus/theme-chalk/display.css'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/store/user'
 
 const router = useRouter()
 const userStore = useUserStore()

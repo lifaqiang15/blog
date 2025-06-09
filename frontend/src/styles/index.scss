@@ -28,20 +28,26 @@
 @import 'sanitize.css/typography.css';
 
 $primary-color: #4aced1;
-$color: #3c3c43;
+$font-color-1: #3c3c43;
+$font-color-2: #67676c;
+
+* {
+  margin: 0;
+  padding: 0;
+}
 
 html,
 body,
 #app {
   height: 100%;
-  color: $color;
+  color: $font-color-1;
   font-family:
     'Punctuation SC', 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 a {
-  color: $color;
+  color: $font-color-1;
   text-decoration: none;
 }
 

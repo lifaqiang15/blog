@@ -4,25 +4,25 @@
       <el-col :span="12" :xs="0"></el-col>
       <el-col :span="12" :xs="24" class="login-container">
         <el-form :model="form" class="login-form">
-          <h1 style="text-align: center">用户登录</h1>
-          <el-form-item>
+          <h1>用户登录</h1>
+          <el-form-item class="form-item">
             <el-input v-model="form.username" placeholder="请输入用户名">
               <template #prefix>
                 <Icon icon="ep:user" />
               </template>
             </el-input>
           </el-form-item>
-          <el-form-item>
+          <el-form-item class="form-item">
             <el-input v-model="form.password" show-password placeholder="请输入密码">
               <template #prefix>
                 <Icon icon="ep:lock" />
               </template>
             </el-input>
           </el-form-item>
-          <el-form-item>
+          <el-form-item class="form-item">
             <el-checkbox v-model="form.remember">记住密码</el-checkbox>
           </el-form-item>
-          <el-form-item>
+          <el-form-item class="form-item">
             <el-button type="primary" :loading="loading" @click="submit" style="width: 100%"
               >登录</el-button
             >
@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import { ref, reactive, onMounted } from 'vue'
-import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/store/user'
 import { useRouter } from 'vue-router'
 
 const userStore = useUserStore()
@@ -68,18 +68,27 @@ const submit = async () => {
   height: 100%;
   background: url('@/assets/login.jpg') no-repeat;
   background-size: cover;
+}
 
-  .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-    .login-form {
-      width: 440px;
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 10px;
-    }
+.login-form {
+  width: 440px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+
+  h1 {
+    margin: 20px 0;
+    text-align: center;
   }
+}
+
+.form-item {
+  margin-bottom: 18px;
 }
 </style>

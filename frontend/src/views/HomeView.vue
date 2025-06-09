@@ -16,6 +16,16 @@
           </ul>
         </div>
       </div>
+      <el-row>
+        <el-col :xs="12" :sm="6" v-for="category in categoryStore.categories">
+          <CategoryCard
+            :key="category.id"
+            :name="category.name"
+            :cover_image="category.cover_image"
+            :description="category.description"
+          />
+        </el-col>
+      </el-row>
     </el-main>
     <el-footer class="footer">
       <p>© 2025-present Faqiang Li. All rights reserved.</p>
@@ -26,9 +36,14 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import HeaderTop from '@/components/HeaderTop.vue'
+import CategoryCard from '@/components/CategoryCard.vue'
+import { useCategoryStore } from '@/store/category'
 
-onMounted(() => {
-  console.log(123)
+const categoryStore = useCategoryStore()
+
+onMounted(async () => {
+  await categoryStore.get_categories()
+  console.log(categoryStore.categories)
 })
 </script>
 
@@ -61,9 +76,13 @@ onMounted(() => {
     color: $primary-color;
   }
 
-  & > ul > li {
-    margin-bottom: 16px;
-    font-size: 20px;
+  ul {
+    margin-top: 10px;
+
+    li {
+      margin-bottom: 16px;
+      font-size: 20px;
+    }
   }
 }
 

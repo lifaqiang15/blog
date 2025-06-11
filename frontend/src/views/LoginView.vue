@@ -37,10 +37,12 @@
 import { Icon } from '@iconify/vue'
 import { ref, reactive, onMounted } from 'vue'
 import { useUserStore } from '@/store/user'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+
+const route = useRoute()
+const router = useRouter()
 
 const userStore = useUserStore()
-const router = useRouter()
 
 const loading = ref(false)
 
@@ -54,7 +56,8 @@ const submit = async () => {
   loading.value = true
   try {
     await userStore.login(form.username, form.password, form.remember)
-    router.push('/')
+    const redirect = (route.query.redirect as string) || '/'
+    router.push(redirect)
   } catch (error) {
     console.log(error)
   } finally {

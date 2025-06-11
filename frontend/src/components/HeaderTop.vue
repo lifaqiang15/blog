@@ -28,9 +28,6 @@
               <router-link to="/user/home" class="link">
                 <el-dropdown-item>我的主页</el-dropdown-item>
               </router-link>
-              <router-link to="/user/profile" class="link">
-                <el-dropdown-item>个人中心</el-dropdown-item>
-              </router-link>
               <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>

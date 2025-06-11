@@ -43,7 +43,6 @@ const categoryStore = useCategoryStore()
 
 onMounted(async () => {
   await categoryStore.get_categories()
-  console.log(categoryStore.categories)
 })
 </script>
 

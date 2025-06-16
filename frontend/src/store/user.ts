@@ -2,8 +2,7 @@ import { defineStore } from 'pinia'
 import { user_login } from '@/api/user'
 import type { Role } from '@/type'
 import type { RouteRecordRaw } from 'vue-router'
-import { filterAsyncRoutes } from '@/permission'
-import { asyncRoutes } from '@/router/routes'
+import { getDynamicRoutes } from '@/router/dynamicRoutes'
 import router from '@/router'
 
 export const useUserStore = defineStore('user', {
@@ -37,11 +36,10 @@ export const useUserStore = defineStore('user', {
           }
 
           // 获取用户路由
-          this.menuRoutes = filterAsyncRoutes(asyncRoutes, result.data!.role)
+          this.menuRoutes = getDynamicRoutes(result.data!.role)
           this.menuRoutes.forEach((route) => {
             router.addRoute('user', route)
           })
-          console.log(router.getRoutes())
 
           return 'ok'
         } else {

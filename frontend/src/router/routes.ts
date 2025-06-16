@@ -1,8 +1,10 @@
-export const constRoutes = [
+import type { RouteRecordRaw } from 'vue-router'
+
+export const constRoutes: RouteRecordRaw[] = [
   {
     path: '/',
-    name: 'home',
-    component: () => import('@/views/HomeView.vue'),
+    name: 'index',
+    component: () => import('@/views/IndexView.vue'),
     meta: {
       title: '首页',
       requiresAuth: true,
@@ -29,32 +31,11 @@ export const constRoutes = [
   {
     path: '/user',
     name: 'user',
-    component: () => import('@/views/UserView.vue'),
-    redirect: '/user/home',
+    component: () => import('@/views/UserLayout.vue'),
     meta: {
       title: '用户',
       requiresAuth: true,
     },
-    children: [
-      {
-        path: 'home',
-        name: 'user-home',
-        component: () => import('@/views/UserHome.vue'),
-        meta: {
-          title: '我的主页',
-          requiresAuth: true,
-        },
-      },
-      {
-        path: 'profile',
-        name: 'profile',
-        component: () => import('@/views/PersonalCenter.vue'),
-        meta: {
-          title: '个人中心',
-          requiresAuth: true,
-        },
-      },
-    ],
   },
   {
     path: '/:pathMatch(.*)*',
@@ -63,39 +44,6 @@ export const constRoutes = [
     meta: {
       title: '页面不存在',
       requiresAuth: false,
-    },
-  },
-]
-
-export const asyncRoutes = [
-  {
-    path: 'create-blog',
-    name: 'create-blog',
-    component: () => import('@/views/CreateBlog.vue'),
-    meta: {
-      title: '创作中心',
-      requiresAuth: true,
-      roles: ['admin', 'blogger'],
-    },
-  },
-  {
-    path: 'user-manage',
-    name: 'user-manage',
-    component: () => import('@/views/UserManage.vue'),
-    meta: {
-      title: '用户管理',
-      requiresAuth: true,
-      roles: ['admin'],
-    },
-  },
-  {
-    path: 'blog-manage',
-    name: 'blog-manage',
-    component: () => import('@/views/BlogManage.vue'),
-    meta: {
-      title: '博客管理',
-      requiresAuth: true,
-      roles: ['admin'],
     },
   },
 ]

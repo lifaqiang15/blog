@@ -1,53 +1,21 @@
-@forward 'element-plus/theme-chalk/src/common/var.scss' with (
-  $colors: (
-    'primary': (
-      // 主色
-      'base': #4aced1,
-    ),
-    'success': (
-      // 成功色
-      'base': #1dc779,
-    ),
-    'warning': (
-      // 警告色
-      'base': #ffb302,
-    ),
-    'danger': (
-      // 危险色
-      'base': #e26237,
-    ),
-    'error': (
-      // 错误色
-      'base': #cf4444,
-    ),
-  )
-);
-
-@import 'sanitize.css';
-@import 'sanitize.css/forms.css';
-@import 'sanitize.css/typography.css';
-
-$primary-color: #4aced1;
-$font-color-1: #3c3c43;
-$font-color-2: #67676c;
-
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 html,
 body,
 #app {
   height: 100%;
-  color: $font-color-1;
+  color: #3c3c43;
   font-family:
     'Punctuation SC', 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 a {
-  color: $font-color-1;
+  color: #3c3c43;
   text-decoration: none;
 }
 

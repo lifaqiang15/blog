@@ -49,7 +49,7 @@ const defaultImage = new URL('@/assets/no-img.svg', import.meta.url).href
   p {
     font-size: 14px;
     line-height: 24px;
-    color: $font-color-2;
+    color: #67676c;
   }
 }
 </style>
